@@ -1,0 +1,46 @@
+{
+  "name": "unary-union",
+  "version": "0.0.1",
+  "description": "Javascript implementation of GEOS's `UnaryUnionOp` algorithm",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "npm run lint && npm run test-es5",
+    "test-es5": "npm run build && tape dist/*.test.js dist/test.js",
+    "test-es6": "tape src/*.test.js src/test.js",
+    "lint": "eslint .",
+    "build": "babel src --out-dir dist",
+    "prepublish": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/nickcis/unary-union.git"
+  },
+  "keywords": [
+    "geojson",
+    "gis",
+    "unary",
+    "union",
+    "unary-union",
+    "combine",
+    "polygon",
+    "line",
+    "linestring"
+  ],
+  "babel": {
+    "presets": ["es2015"]
+  },
+  "author": "Nicolas Cisco <@nickcis>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nickcis/unary-union/issues"
+  },
+  "homepage": "https://github.com/nickcis/unary-union#readme",
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-preset-es2015": "^6.24.1",
+    "eslint": "^3.19.0",
+    "eslint-config-mourner": "^2.0.1",
+    "tape": "^4.6.3"
+  },
+  "dependencies": {}
+}
