@@ -2,11 +2,18 @@
  */
 class Edge {
   /**
-   * @param {Array[Coordinates]} newPts -
+   * @param {Coordinates[]} newPts -
    * @params {Label} label -
    */
   constructor(newPts, label) {
     this.pts = newPts;
+  }
+
+  /**
+   * @return {Coordinates[]}
+   */
+  getCoordinates() {
+    return this.pts;
   }
 }
 
