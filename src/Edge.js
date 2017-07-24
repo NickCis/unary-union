@@ -15,6 +15,11 @@ class Edge {
   getCoordinates() {
     return this.pts;
   }
+
+  // TODO: setIsolated(boolean)
+  // TODO: addIntersections(li, segIndex, number)
+  // TODO: isClosed()
+  // TODO: getNumPoints()
 }
 
 module.exports = Edge;
