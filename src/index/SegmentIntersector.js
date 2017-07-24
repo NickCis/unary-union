@@ -41,7 +41,7 @@ class SegmentIntersector {
     const p10 = cl1[segIndex1];
     const p11 = cl1[segIndex1+1];
 
-    this.li.computeIntersections(p00, p01, p10, p11);
+    this.li.computeIntersection(p00, p01, p10, p11);
     /*
      * Always record any non-proper intersections.
      * If includeProper is true, record any proper intersections as well.

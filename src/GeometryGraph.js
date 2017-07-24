@@ -1,6 +1,6 @@
-const {getGeomType, getCoord} = require('@turf/invariant');
-const booleanClockwise = require('@turf/boolean-clockwise');
-const {removeRepeatedPoints, getCoordinateKey, isInBoundary} = require('./util');
+const {getGeomType, getCoord, getGeom} = require('@turf/invariant');
+const {flattenEach} = require('@turf/meta');
+const {removeRepeatedPoints, isInBoundary} = require('./util');
 const PlanarGraph = require('./PlanarGraph');
 const Edge = require('./Edge');
 const Label = require('./Label');
@@ -43,7 +43,7 @@ class GeometryGraph extends PlanarGraph {
     // XXX: Check if g is empty?
     const type = getGeomType(g);
 
-    // XXX: dynamic_cast of multipolygon, is it possible? -> Aren't we flatenning things on UnaryUnionOp?
+    // XXX: dynamic_cast of multipolygon, is it possible?
 
     // check if this Geometry should obey the Boundary Determination Rule
     // all collections except MultiPolygons obey the rule
@@ -63,7 +63,13 @@ class GeometryGraph extends PlanarGraph {
         this.addPoint(g);
         break;
 
-      // TODO: case collection -> does this exists in this case? Aren't we flatenning things on UnaryUnionOp?
+      // XXX: Is it possible MultiLineString, MultiPolygon or MultiPoint?
+      case 'MultiPoint':
+      case 'MultiLineString':
+      case 'MultiPolygon':
+      case 'GeometryCollection':
+        this.addCollection(g);
+        break;
 
       default:
         throw new Error(`GeometryGraph::add(): unsupported type: '${type}'`);
@@ -189,7 +195,15 @@ class GeometryGraph extends PlanarGraph {
   }
 
   /**
-   * \brief
+   * @param {GeometryCollection|FeatureCollection} gc -
+   */
+  addCollection(gc) {
+    flattenEach(gc, feature => {
+      this.add(getGeom(feature));
+    });
+  }
+
+  /**
    * Compute self-nodes, taking advantage of the Geometry type to
    * minimize the number of intersection tests.  (E.g. rings are
    * not tested for self-intersection, since
@@ -204,6 +218,7 @@ class GeometryGraph extends PlanarGraph {
    *   the intersections found
    */
   computeSelfNodes(/*li,*/computeRingSelfNodes) {
+    // TODO:
   }
 }
 

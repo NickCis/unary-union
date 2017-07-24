@@ -1,6 +1,6 @@
-const EdgeLineIntersector = require('./');
+const EdgeSetIntersector = require('./');
 
-class SimpleEdgeIntersector extends EdgeLineIntersector {
+class SimpleEdgeIntersector extends EdgeSetIntersector {
   constructor() {
     this.nOverlaps = 0;
   }

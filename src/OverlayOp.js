@@ -1,5 +1,6 @@
-const PlanarGraph = require('./PlanarGraph');
+const LineIntersector = require('./LineIntersector');
 const GeometryGraph = require('./GeometryGraph');
+const PlanarGraph = require('./PlanarGraph');
 
 /** GEOS's OverlayOp (includes GeometryGraphOperation)
  */
@@ -16,6 +17,7 @@ class OverlayOp {
 
   constructor(geom0, geom1) {
     // GeometryGraphOperation constructor
+    this.li = new LineIntersector();
     this.arg = [
       new GeometryGraph(0, geom0),
       new GeometryGraph(1, geom1),
@@ -36,8 +38,8 @@ class OverlayOp {
 
     // node the input Geometries
     // TODO:
-    this.arg[0].computeSelfNodes(false);
-    this.arg[1].computeSelfNodes(false);
+    this.arg[0].computeSelfNodes(this.li, false);
+    this.arg[1].computeSelfNodes(this.li, false);
   }
 
   /**
@@ -59,6 +61,10 @@ class OverlayOp {
         const newNode = this.graph.addNode(graphNode.getCoordinate());
         newNode.setLabel(argIndex, graphNode.getLabel().getLocation(argIndex));
       });
+  }
+
+  static get opUNION() {
+    return 'OP_UNION';
   }
 }
 
