@@ -1,4 +1,9 @@
-const {orientationIndex, equals2D} = require('./util');
+const {
+  orientationIndex,
+  equals2D,
+  envelopeIntersectsPoint,
+  envelopeIntersectsEnvelope
+} = require('./util');
 
 /** GEOS's `geos::algorithm::LineIntersector` class
  *
@@ -61,7 +66,9 @@ class LineIntersector {
   computeIntersect(p1, p2, q1, q2) {
     this.isProperVar = false;
 
-    // XXX: We won't do the envelope optimization done by GEOS
+    // first try a fast test to see if the envelopes of the lines intersect
+    if (envelopeIntersectsEnvelope(p1, p2, q1, q2))
+      return LineIntersector.NO_INTERSECTION;
 
     // for each endpoint, compute which side of the other segment it lies
     // if both endpoints lie on the same side of the other segment,
@@ -127,7 +134,42 @@ class LineIntersector {
    * @return {Number} - result
    */
   computeCollinearIntersection(p1, p2, q1, q2) {
-    // TODO:
+    const p1q1p2 = envelopeIntersectsPoint(p1, p2, q1);
+    const p1q2p2 = envelopeIntersectsPoint(p1, p2, q2);
+    const q1p1q2 = envelopeIntersectsPoint(q1, q2, p1);
+    const q1p2q2 = envelopeIntersectsPoint(q1, q2, p2);
+
+    if (p1q1p2 && p1q2p2) {
+      this.intPt = [q1, q2];
+      return LineIntersector.COLLINEAR_INTERSECTION;
+    }
+
+    if (q1p2q2 && q1p2q2) {
+      this.intPt = [p1, p2];
+      return LineIntersector.COLLINEAR_INTERSECTION;
+    }
+
+    if (p1q1p2 && q1p1q2) {
+      this.intPt = [q1, p1];
+      return ((q1==p1) && !p1q2p2 && !q1p2q2) ? LineIntersector.POINT_INTERSECTION : LineIntersector.COLLINEAR_INTERSECTION;
+    }
+
+    if (p1q1p2 && q1p2q2) {
+      this.intPt = [q1, p2];
+      return ((q1==p2) && !p1q2p2 && !q1p1q2) ? LineIntersector.POINT_INTERSECTION : LineIntersector.COLLINEAR_INTERSECTION;
+    }
+
+    if (p1q2p2 && q1p1q2) {
+      this.intPt = [q2, p1];
+      return ((q2==p1) && !p1q1p2 && !q1p2q2) ? LineIntersector.POINT_INTERSECTION : LineIntersector.COLLINEAR_INTERSECTION;
+    }
+
+    if (p1q2p2 && q1p2q2) {
+      this.intPt = [q2, p2];
+      return ((q2==p2) && !p1q1p2 && !q1p1q2) ? LineIntersector.POINT_INTERSECTION : LineIntersector.COLLINEAR_INTERSECTION;
+    }
+
+    return LineIntersector.NO_INTERSECTION;
   }
 
   /**
