@@ -1,4 +1,4 @@
-const NodeMap = require('./NodeMap);
+const NodeMap = require('./NodeMap');
 
 class PlanarGraph {
   constructor() {

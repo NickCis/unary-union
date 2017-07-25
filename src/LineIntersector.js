@@ -67,7 +67,7 @@ class LineIntersector {
     this.isProperVar = false;
 
     // first try a fast test to see if the envelopes of the lines intersect
-    if (envelopeIntersectsEnvelope(p1, p2, q1, q2))
+    if (!envelopeIntersectsEnvelope(p1, p2, q1, q2))
       return LineIntersector.NO_INTERSECTION;
 
     // for each endpoint, compute which side of the other segment it lies
@@ -77,7 +77,7 @@ class LineIntersector {
     const pq2 = orientationIndex(p1, p2, q2);
     if (
       (pq1 > 0 && pq2 > 0) ||
-      (pq1 < 0 && pq2 < 0) ||
+      (pq1 < 0 && pq2 < 0)
     )
       return LineIntersector.NO_INTERSECTION;
 
@@ -85,11 +85,11 @@ class LineIntersector {
     const qp2 = orientationIndex(q1, q2, p2);
     if (
       (qp1 > 0 && qp2 > 0) ||
-      (qp1 < 0 && qp2 < 0) ||
+      (qp1 < 0 && qp2 < 0)
     )
       return LineIntersector.NO_INTERSECTION;
 
-    const collinear = pq1 == 00 && pq2 == 0 && qp1 == 0 && qp2 == 0;
+    const collinear = pq1 == 0 && pq2 == 0 && qp1 == 0 && qp2 == 0;
     if (collinear)
       return this.computeCollinearIntersection(p1, p2, q1, q2);
 
@@ -144,29 +144,29 @@ class LineIntersector {
       return LineIntersector.COLLINEAR_INTERSECTION;
     }
 
-    if (q1p2q2 && q1p2q2) {
+    if (q1p1q2 && q1p2q2) {
       this.intPt = [p1, p2];
       return LineIntersector.COLLINEAR_INTERSECTION;
     }
 
     if (p1q1p2 && q1p1q2) {
       this.intPt = [q1, p1];
-      return ((q1==p1) && !p1q2p2 && !q1p2q2) ? LineIntersector.POINT_INTERSECTION : LineIntersector.COLLINEAR_INTERSECTION;
+      return (equals2D(q1, p1) && !p1q2p2 && !q1p2q2) ? LineIntersector.POINT_INTERSECTION : LineIntersector.COLLINEAR_INTERSECTION;
     }
 
     if (p1q1p2 && q1p2q2) {
       this.intPt = [q1, p2];
-      return ((q1==p2) && !p1q2p2 && !q1p1q2) ? LineIntersector.POINT_INTERSECTION : LineIntersector.COLLINEAR_INTERSECTION;
+      return (equals2D(q1, p2) && !p1q2p2 && !q1p1q2) ? LineIntersector.POINT_INTERSECTION : LineIntersector.COLLINEAR_INTERSECTION;
     }
 
     if (p1q2p2 && q1p1q2) {
       this.intPt = [q2, p1];
-      return ((q2==p1) && !p1q1p2 && !q1p2q2) ? LineIntersector.POINT_INTERSECTION : LineIntersector.COLLINEAR_INTERSECTION;
+      return (equals2D(q2, p1) && !p1q1p2 && !q1p2q2) ? LineIntersector.POINT_INTERSECTION : LineIntersector.COLLINEAR_INTERSECTION;
     }
 
     if (p1q2p2 && q1p2q2) {
       this.intPt = [q2, p2];
-      return ((q2==p2) && !p1q1p2 && !q1p1q2) ? LineIntersector.POINT_INTERSECTION : LineIntersector.COLLINEAR_INTERSECTION;
+      return (equals2D(q2, p2) && !p1q1p2 && !q1p1q2) ? LineIntersector.POINT_INTERSECTION : LineIntersector.COLLINEAR_INTERSECTION;
     }
 
     return LineIntersector.NO_INTERSECTION;

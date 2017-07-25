@@ -21,7 +21,7 @@ class Node {
     if (this.label)
       this.label.setLocation(argIndex, onLocation);
     else
-      this.label = new Label(argIndex, onLocation):
+      this.label = new Label(argIndex, onLocation);
   }
 
   /**

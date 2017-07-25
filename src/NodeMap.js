@@ -24,4 +24,4 @@ class NodeMap {
   }
 }
 
-modules.exports = NodeMap;
+module.exports = NodeMap;
