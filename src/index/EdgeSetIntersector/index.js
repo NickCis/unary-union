@@ -17,6 +17,9 @@ class EdgeSeyIntersector {
   /**
    * Computes all mutual intersections between two sets of edges
    * GEOS's `EdgeSetIntersector::computeIntersections(std::vector<Edge*> *edges0, std::vector<Edge*> *edges1, SegmentIntersector *si)`
+   * @param {Edge[]} e0 -
+   * @param {Edge[]} e1 -
+   * @param {SegmentIntersector} si -
    */
   computeMutualIntersections(edges0, edges1, si) {
     throw new Error("Not implemented");

@@ -44,6 +44,10 @@ class OverlayOp {
     // compute intersections between edges of the two input geometries
     this.arg[0].computeEdgeIntersections(this.arg[1], li, false);
 
+    const baseSplitEdges = []; //< {Edge[]}
+    this.arg[0].computeSplitEdges(baseSplitEdges);
+    this.arg[1].computeSplitEdges(baseSplitEdges);
+
     // TODO:
   }
 

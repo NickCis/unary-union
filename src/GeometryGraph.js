@@ -21,6 +21,7 @@ class GeometryGraph extends PlanarGraph {
     this.argIndex = argIndex; //< {Number}
     this.parentGeom = parentGeom; //< {Geometry}
     this.useBoundaryDeterminationRule = true;
+    this.boundaryNodes = undefined //< {Node[]}
 
     /**
      * The lineEdgeMap is a map of the linestring components of the
@@ -288,8 +289,25 @@ class GeometryGraph extends PlanarGraph {
    */
   computeEdgeIntersections(g, li, includeProper) {
     const si = new SegmentIntersector(li, includeProper, true);
-    si.setBoundaryNodes();
-    // TODO:
+    si.setBoundaryNodes(this.getBoundaryNodes(), g.getBoundaryNodes());
+    const esi = this.createEdgeSetIntersector();
+    esi.computeMutualIntersections(this.edges, g.edges, si);
+    return si;
+  }
+
+  getBoundaryNodes() {
+    if (! this.boundaryNodes)
+      this.boundaryNodes = this.nodes.getBoundaryNodes(this.argIndex);
+    return this.boundaryNodes;
+  }
+
+  /**
+   * @param {Edge[]} edgeList -
+   */
+  computeSplitEdges(edgeList) {
+    this.edges.forEach(e => {
+      e.eiList.addSplitEdges(edgeList);
+    });
   }
 }
 

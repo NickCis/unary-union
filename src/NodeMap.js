@@ -1,3 +1,4 @@
+const Location = require('./Location');
 const {getCoordinateKey} = require('./util');
 
 class NodeMap {
@@ -34,6 +35,20 @@ class NodeMap {
       return this.nodeMap[coordKey];
 
     return undefined;
+  }
+
+  /**
+   * @param {Number} geomIndex -
+   * @return {Node[]} -
+   */
+  getBoundaryNodes(geomIndex) {
+    const bdyNodes = [];
+    this.forEach(node => {
+      if (node.getLabel().getLocation(geomIndex) == Location.BOUNDARY)
+        bdyNodes.push(node);
+    });
+
+    return bdyNodes;
   }
 }
 

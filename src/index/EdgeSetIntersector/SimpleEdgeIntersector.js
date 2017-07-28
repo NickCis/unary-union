@@ -6,11 +6,11 @@ class SimpleEdgeIntersector extends EdgeSetIntersector {
   }
 
   computeSelfIntersections(edges, si, testAllSegments) {
-    nOverlaps = 0;
+    this.nOverlaps = 0;
     edges.forEach(edge0 => {
       edges.forEach(edge1 => {
         if (testAll || edge0 != edge1)
-          this.computeIntersects(edge0, edge1, si);
+          this.computeMutualIntersections(edge0, edge1, si);
       });
     });
   }
@@ -24,7 +24,7 @@ class SimpleEdgeIntersector extends EdgeSetIntersector {
    * @param {Edge[]} e1 -
    * @param {SegmentIntersector} si -
    */
-  computeIntersects(e0, e1, si) {
+  computeMutualIntersections(e0, e1, si) {
     const pts0 = e0.getCoordinates();
     const pts1 = e1.getCoordinates();
 
@@ -34,8 +34,6 @@ class SimpleEdgeIntersector extends EdgeSetIntersector {
       }
     }
   }
-
-  // TODO: computeMutualIntersections
 }
 
 module.exports = SimpleEdgeIntersector;
