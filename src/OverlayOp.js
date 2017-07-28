@@ -23,6 +23,7 @@ class OverlayOp {
       new GeometryGraph(1, geom1),
     ];
 
+    // OverlayOp ---
     this.graph = new PlanarGraph();
   }
 
@@ -37,9 +38,13 @@ class OverlayOp {
     this.copyPoints(1);
 
     // node the input Geometries
-    // TODO:
     this.arg[0].computeSelfNodes(this.li, false);
     this.arg[1].computeSelfNodes(this.li, false);
+
+    // compute intersections between edges of the two input geometries
+    this.arg[0].computeEdgeIntersections(this.arg[1], li, false);
+
+    // TODO:
   }
 
   /**

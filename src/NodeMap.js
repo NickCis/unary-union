@@ -11,7 +11,7 @@ class NodeMap {
    */
   addNode(coord) {
     const coordKey = getCoordinateKey(coord);
-    if (! coordKey in this.nodeMap)
+    if (! (coordKey in this.nodeMap))
       this.nodeMap[coordKey] = new Node(coord);
 
     return this.nodeMap[coordKey];
@@ -21,6 +21,19 @@ class NodeMap {
     Object.keys(this.nodeMap)
       .map(k => this.nodeMap[k])
       .forEach(f);
+  }
+
+  /**
+   * Finds a node in the map by coordinate
+   * @param {Coordinate} coord - coordinate to use as key
+   * @return {Node} - Node founded or undefined
+   */
+  find(coord) {
+    const coordKey = getCoodinateKey(coord);
+    if (getCoodinateKey(coord) in this.nodeMap)
+      return this.nodeMap[coordKey];
+
+    return undefined;
   }
 }
 

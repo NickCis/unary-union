@@ -6,6 +6,8 @@ const Edge = require('./Edge');
 const Label = require('./Label');
 const Node = require('./Node');
 const Location = require('./Location');
+const SegmentIntersector = require('./index/SegmentIntersector');
+const SimpleEdgeIntersector = require('./index/SimpleEdgeIntersector');
 
 /** GEOS's geos::geomgraph::GeometryGraph
  * A GeometryGraph is a graph that models a given geometry
@@ -203,6 +205,17 @@ class GeometryGraph extends PlanarGraph {
     });
   }
 
+
+  /** allocates a new EdgeSetIntersector.
+   * @return {EdgeSetIntersector} -
+   */
+  createEdgeSetIntersector() {
+    // XXX: GEOS uses the SimpleMCSweepLineIntersector which is more efficient,
+    // but the SimpleEdgeIntersector's implementation is easier, that's why i'm using it
+    return new SimpleEdgeIntersector();
+    //return new SimpleMCSweepLineIntersector();
+  }
+
   /**
    * Compute self-nodes, taking advantage of the Geometry type to
    * minimize the number of intersection tests.  (E.g. rings are
@@ -217,7 +230,65 @@ class GeometryGraph extends PlanarGraph {
    * @return the SegmentIntersector used, containing information about
    *   the intersections found
    */
-  computeSelfNodes(/*li,*/computeRingSelfNodes) {
+  computeSelfNodes(li, computeRingSelfNodes) {
+    const si = new SegmentIntersector(li, true, false);
+    const esi = this.createEdgeSetIntersector();
+    const parentGeomType = ;
+    if (! computeRingSelfNodes &&
+      (['Polygon', 'MultiPolygon'].find(getGeomType(this.parentGeom)) != -1)
+    ) {
+      esi.computeSelfIntersections(this.edges, si, false);
+    } else {
+      esi.computeSelfIntersections(this.edges, si, true);
+    }
+
+    this.addSelfIntersectionNodes(this.argIndex);
+    return si;
+  }
+
+  /**
+   * @param {Number} argIndex -
+   */
+  addSelfIntersectionNodes(argIndex) {
+    this.edges.forEach(e => {
+      const eLoc = e.getLabel().getLocation(argIndex);
+      e.eiList.getElements()
+        .forEach(ei => {
+          this.addSelfIntersectionNode(argIndex, ei.getCoordinate(), eLoc);
+        });
+    });
+  }
+
+  /**
+   * Add a node for a self-intersection.
+   *
+   * If the node is a potential boundary node (e.g. came from an edge
+   * which is a boundary) then insert it as a potential boundary node.
+   * Otherwise, just add it as a regular node.
+   * @param {Number} argIndex -
+   * @param {Coordinate} coord -
+   * @param {Number} loc -
+   */
+  addSelfIntersectionNode(argIndex, coord, loc) {
+    // if this node is already a boundary node, don't change it
+    if (this.isBoundaryNode(argIndex, coord))
+      return;
+
+    if (loc == Location.BOUNDARY && this.useBoundaryDeterminationRule)
+      this.insertBoundaryPoint(argIndex, coord);
+    else
+      this.insertPoint(argIndex, coord, loc);
+  }
+
+  /**
+   * @param {GeometryGraph} g -
+   * @param {LineIntersector} li -
+   * @param {boolean} includeProper -
+   * @return {SegmentIntersector}
+   */
+  computeEdgeIntersections(g, li, includeProper) {
+    const si = new SegmentIntersector(li, includeProper, true);
+    si.setBoundaryNodes();
     // TODO:
   }
 }

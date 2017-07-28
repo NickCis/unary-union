@@ -1,4 +1,5 @@
 const NodeMap = require('./NodeMap');
+const Location = require('./Location');
 
 class PlanarGraph {
   constructor() {
@@ -27,6 +28,24 @@ class PlanarGraph {
    */
   getNodeMap() {
     return this.nodes;
+  }
+
+  /**
+   * @param {Number} geomIndex -
+   * @param {Coordinate} coord -
+   * @return {boolean} -
+   */
+  isBoundaryNode(geomIndex, coord) {
+    const node = this.nodes.find(coord);
+
+    if (!node)
+      return false;
+
+    const label = node.getLabel();
+    if (!label && label.getLocation(geomIndex) == Location.BOUNDARY)
+      return true;
+
+    return false;
   }
 }
 

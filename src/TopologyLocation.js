@@ -56,6 +56,7 @@ class TopologyLocation {
 
   /**
    * @param {Number} posIndex -
+   * @return {LocationEnum} -
    */
   get(posIndex) {
     return posIndex in this.location ? this.location[posIndex] : Location.UNDEF;

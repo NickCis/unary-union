@@ -239,6 +239,83 @@ class LineIntersector {
     }
     return false;
   }
+
+  /**
+   * Returns the intIndex'th intersection point
+   *
+   * @param intIndex is 0 or 1
+   * @return {Coordinate} - the intIndex'th intersection point
+   */
+  getIntersection(intIndex) {
+    return this.intPt[intIndex];
+  }
+  /**
+   * Computes the "edge distance" of an intersection point along the specified
+   * input line segment.
+   *
+   * @param {Number} segmentIndex - is 0 or 1
+   * @param {Number} intIndex - is 0 or 1
+   *
+   * @return {Number} - the edge distance of the intersection point
+   */
+  getEdgeDistance(segmentIndex, intIndex) {
+    return LineIntersector.computeEdgeDistance(
+      this.intPt[intIndex],
+      this.inputLines[segmentIndex][0],
+      this.inputLines[segmentIndex][1]
+    );
+  }
+
+  /**
+   * Computes the "edge distance" of an intersection point p in an edge.
+   *
+   * The edge distance is a metric of the point along the edge.
+   * The metric used is a robust and easy to compute metric function.
+   * It is `not` equivalent to the usual Euclidean metric.
+   * It relies on the fact that either the x or the y ordinates of the
+   * points in the edge are unique, depending on whether the edge is longer in
+   * the horizontal or vertical direction.
+   *
+   * NOTE: This function may produce incorrect distances
+   *  for inputs where p is not precisely on p1-p2
+   * (E.g. p = (139,9) p1 = (139,10), p2 = (280,1) produces distanct
+   * 0.0, which is incorrect.
+   *
+   * My hypothesis is that the function is safe to use for points which are the
+   * result of `rounding` points which lie on the line,
+   * but not safe to use for `truncated` points.
+   *
+   * @param {Coordinate} p -
+   * @param {Coordinate} p0 -
+   * @param {Coordinate} p1 -
+   *
+   */
+  static computeEdgeDistance(p, p0, p1) {
+    const dx = Math.abs(p1[0] - p0[0]);
+    const dy = Math.abs(p1[1] - p0[1]);
+    const dist = -1.0; // sentinel value
+    if (p == p0 || equals2D(p, p0)) {
+      dist = 0.0;
+    } else if (p == p1 || equals2D(p, p1)) {
+      if (dx > dy)
+        dist = dx;
+      else
+        dist = dy;
+    } else {
+      const pdx = Math.abs(p[0] - p0[0]);
+      const pdy = Math.abs(p[1] - p0[1]);
+      if (dx > dy)
+        dist = pdx;
+      else
+        dist = pdy;
+      // XXX: <FIX>
+      // hack to ensure that non-endpoints always have a non-zero distance
+      if (dist == 0.0 && !(p == p0))
+        dist = Math.max(pdx, pdy);
+    }
+
+    return dist;
+  }
 }
 
 module.exports = LineIntersector;

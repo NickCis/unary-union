@@ -20,7 +20,7 @@ class Label {
     this.elt = [
       new TopologyLocation(Location.UNDEF, Location.UNDEF, Location.UNDEF),
       new TopologyLocation(Location.UNDEF, Location.UNDEF, Location.UNDEF),
-    ]; // {TopologyLocation[2]}
+    ]; //< {TopologyLocation[2]}
 
     if (args.length >= 2) {
       const [leftLoc, rightLoc] = args;
