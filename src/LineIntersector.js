@@ -267,6 +267,24 @@ class LineIntersector {
   }
 
   /**
+   * Tests whether an intersection is proper.
+   *
+   * The intersection between two line segments is considered proper if
+   * they intersect in a single point in the interior of both segments
+   * (e.g. the intersection is a single point and is not equal to any of the
+   * endpoints).
+   *
+   * The intersection between a point and a line segment is considered proper
+   * if the point lies in the interior of the segment (e.g. is not equal to
+   * either of the endpoints).
+   *
+   * @return {boolean} - true if the intersection is proper
+   */
+  isProper() {
+    return this.hasIntersection() && this.isProperVar;
+  }
+
+  /**
    * Computes the "edge distance" of an intersection point p in an edge.
    *
    * The edge distance is a metric of the point along the edge.
@@ -293,7 +311,7 @@ class LineIntersector {
   static computeEdgeDistance(p, p0, p1) {
     const dx = Math.abs(p1[0] - p0[0]);
     const dy = Math.abs(p1[1] - p0[1]);
-    const dist = -1.0; // sentinel value
+    let dist = -1.0; // sentinel value
     if (p == p0 || equals2D(p, p0)) {
       dist = 0.0;
     } else if (p == p1 || equals2D(p, p1)) {
@@ -310,7 +328,7 @@ class LineIntersector {
         dist = pdy;
       // XXX: <FIX>
       // hack to ensure that non-endpoints always have a non-zero distance
-      if (dist == 0.0 && !(p == p0))
+      if (dist == 0.0 && !(p == p0 || equals2D(p, p0)))
         dist = Math.max(pdx, pdy);
     }
 
