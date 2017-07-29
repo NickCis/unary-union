@@ -9,7 +9,7 @@ class SimpleEdgeIntersector extends EdgeSetIntersector {
     this.nOverlaps = 0;
     edges.forEach(edge0 => {
       edges.forEach(edge1 => {
-        if (testAll || edge0 != edge1)
+        if (testAllSegments || edge0 != edge1)
           this.computeMutualIntersections(edge0, edge1, si);
       });
     });

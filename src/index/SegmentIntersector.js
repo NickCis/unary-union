@@ -61,16 +61,16 @@ class SegmentIntersector {
       // only intersection.
       if (!this.isTrivialIntersection(e0, segIndex0, e1, segIndex1)) {
         this.hasIntersectionVar = true;
-        if (this.includeProper || !li.isProper()) {
-          e0.addIntersections(li, segIndex0, 0);
-          e1.addIntersections(li, segIndex1, 1);
+        if (this.includeProper || !this.li.isProper()) {
+          e0.addIntersections(this.li, segIndex0, 0);
+          e1.addIntersections(this.li, segIndex1, 1);
         }
 
-        if (li.isProper()) {
-          this.properIntersectionPoint = li.getIntersection(0);
+        if (this.li.isProper()) {
+          this.properIntersectionPoint = this.li.getIntersection(0);
           this.hasProper = true;
 
-          if (this.isBoundaryPointVectorVector(li, this.bdyNodes))
+          if (this.isBoundaryPointVectorVector(this.li, this.bdyNodes))
             this.hasProperInterior = true;
         }
       }
@@ -110,6 +110,9 @@ class SegmentIntersector {
 
   /**
    * bool SegmentIntersector::isBoundaryPoint(LineIntersector *li, vector<vector<Node*>*>& tstBdyNodes);
+   * @param {LineIntersector} li -
+   * @param {Node[][]} tstBdyNodes -
+   * @return {boolean} -
    */
   isBoundaryPointVectorVector(li, tstBdyNodes) {
     if (this.isBoundaryPointVector(li, tstBdyNodes[0]))
@@ -121,6 +124,9 @@ class SegmentIntersector {
 
   /**
    * bool SegmentIntersector::isBoundaryPoint(LineIntersector *li, vector<Node*> *tstBdyNodes);
+   * @param {LineIntersector} li -
+   * @param {Node[]} tstBdyNodes -
+   * @return {boolean} -
    */
   isBoundaryPointVector(li, tstBdyNodes) {
     if (!tstBdyNodes)
@@ -173,7 +179,7 @@ class SegmentIntersector {
   }
 
   /*
-   * A proper interior intersection is a proper intersection which is <b>not</b>
+   * A proper interior intersection is a proper intersection which is `not`
    * contained in the set of boundary nodes set for this SegmentIntersector.
    *
    * @return {boolean} -

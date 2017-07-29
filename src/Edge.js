@@ -1,5 +1,5 @@
 const EdgeIntersectionList = require('./EdgeIntersectionList');
-const {equals2D} = require('util');
+const {equals2D} = require('./util');
 
 /** GEOS's geos::geomgraph::Edge
  */

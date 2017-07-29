@@ -1,6 +1,6 @@
 /** GEOS's EdgeSetIntersector interface,
  */
-class EdgeSeyIntersector {
+class EdgeSetIntersector {
   /**
    * Computes all self-intersections between edges in a set of edges,
    * allowing client to choose whether self-intersections are computed.

@@ -7,7 +7,7 @@ const Label = require('./Label');
 const Node = require('./Node');
 const Location = require('./Location');
 const SegmentIntersector = require('./index/SegmentIntersector');
-const SimpleEdgeIntersector = require('./index/SimpleEdgeIntersector');
+const SimpleEdgeIntersector = require('./index/EdgeSetIntersector/SimpleEdgeIntersector');
 
 /** GEOS's geos::geomgraph::GeometryGraph
  * A GeometryGraph is a graph that models a given geometry
@@ -234,7 +234,6 @@ class GeometryGraph extends PlanarGraph {
   computeSelfNodes(li, computeRingSelfNodes) {
     const si = new SegmentIntersector(li, true, false);
     const esi = this.createEdgeSetIntersector();
-    const parentGeomType = ;
     if (! computeRingSelfNodes &&
       (['Polygon', 'MultiPolygon'].find(getGeomType(this.parentGeom)) != -1)
     ) {

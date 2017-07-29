@@ -92,7 +92,7 @@ class EdgeIntersectionList {
     const vc = [] //< {Coordinate[]};
 
     vc.push(ei0.coord);
-    for (int i = ei0.segmentIndex + 1; i <= ei1.segmentIndex; i++) {
+    for (let i = ei0.segmentIndex + 1; i <= ei1.segmentIndex; i++) {
       if (!useIntPt1 && ei1.segmentIndex == i)
         vc.push(ei1.coord);
       else
@@ -111,7 +111,7 @@ class EdgeIntersectionList {
   addEndpoints() {
     const maxSegIndex = this.edge.getNumPoints() - 1;
     this.add(this.edge.pts[0], 0, 0.0);
-    this.add(this.edge.pts.[maxSegIndex], maxSegIndex, 0.0);
+    this.add(this.edge.pts[maxSegIndex], maxSegIndex, 0.0);
   }
 }
 
