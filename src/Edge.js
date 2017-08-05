@@ -57,6 +57,7 @@ class Edge {
    * @param {Number} geomIndex -
    */
   addIntersections(li, segmentIndex, geomIndex) {
+    console.log('----  addIntersections');
     // TODO
     for (let i=0; i < li.getIntersectionNum(); i++) {
       this.addIntersection(li, segmentIndex, geomIndex, i);

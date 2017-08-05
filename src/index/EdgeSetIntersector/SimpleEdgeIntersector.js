@@ -2,11 +2,13 @@ const EdgeSetIntersector = require('./');
 
 class SimpleEdgeIntersector extends EdgeSetIntersector {
   constructor() {
-    this.nOverlaps = 0;
+    super();
+    //this.nOverlaps = 0;
   }
 
   computeSelfIntersections(edges, si, testAllSegments) {
-    this.nOverlaps = 0;
+    //this.nOverlaps = 0;
+    console.log(edges);
     edges.forEach(edge0 => {
       edges.forEach(edge1 => {
         if (testAllSegments || edge0 != edge1)
@@ -28,8 +30,8 @@ class SimpleEdgeIntersector extends EdgeSetIntersector {
     const pts0 = e0.getCoordinates();
     const pts1 = e1.getCoordinates();
 
-    for (let i0 = 0; i0 < pts0.length; ++i0) {
-      for (let i1 = 0; i1 < pts1.length; ++i1) {
+    for (let i0 = 0; i0 < pts0.length - 1; ++i0) {
+      for (let i1 = 0; i1 < pts1.length - 1; ++i1) {
         si.addIntersections(e0, i0, e1, i1);
       }
     }
