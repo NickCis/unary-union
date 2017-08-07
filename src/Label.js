@@ -2,31 +2,59 @@ const TopologyLocation = require('./TopologyLocation');
 const Location = require('./Location');
 
 /** GEOS's geos::geomgraph::Label
- * TODO
  */
 class Label {
-  /** Construct a Label with On, Left and Right locations for the
+  /**
+   * `Label::Label(int geomIndex, int onLoc, int leftLoc, int rightLoc)`
+   * Construct a Label with On, Left and Right locations for the
    * given Geometries.
    *
-   * Initialize the locations for the other Geometries to
-   * Location::UNDEF
+   * Initialize the locations for the other Geometries to Location::UNDEF
    *
-   * @param {Number} geomIndex -
-   * @param  {Number} onLoc -
-   * @param {Number} leftLoc -
-   * @param {Number} rightLoc -
+   * `Label:Label(int geomIndex, int onLoc)`
+   * Construct a Label with the location specified for the given Geometry.
+   *
+   * Other geometry location will be set to Location::UNDEF.
+   *
+   * `Label::Label()`
+   * Initialize both locations to Location::UNDEF
+   * isNull() should return true after this kind of construction
+   *
+   * @param {Number} geomIndex - [optional]
+   * @param {Number} onLoc - [optional]
+   * @param {Number} leftLoc - [optional]
+   * @param {Number} rightLoc - [optional]
    */
-  constructor(geomIndex, onLoc, ...args) {
-    this.elt = [
-      new TopologyLocation(Location.UNDEF, Location.UNDEF, Location.UNDEF),
-      new TopologyLocation(Location.UNDEF, Location.UNDEF, Location.UNDEF),
-    ]; //< {TopologyLocation[2]}
+  constructor(...args) {
+    switch(args.length) {
+      case 0:
+        this.elt = [
+          new TopologyLocation(Location.UNDEF),
+          new TopologyLocation(Location.UNDEF),
+        ]; //< {TopologyLocation[2]}
+        break;
 
-    if (args.length >= 2) {
-      const [leftLoc, rightLoc] = args;
-      this.elt[geomIndex].setLocations(onLoc, leftLoc, rightLoc);
-    } else {
-      this.elt[geomIndex].setLocation(onLoc);
+      case 2:
+        const [geomIndex, onLoc] = args;
+        this.elt = [
+          new TopologyLocation(Location.UNDEF),
+          new TopologyLocation(Location.UNDEF),
+        ]; //< {TopologyLocation[2]}
+        this.elt[geomIndex].setLocation(onLoc);
+        break;
+
+      case 4:
+        const [geomIndex, onLoc, leftLoc, rightLoc] = args;
+        this.elt = [
+          new TopologyLocation(Location.UNDEF, Location.UNDEF, Location.UNDEF),
+          new TopologyLocation(Location.UNDEF, Location.UNDEF, Location.UNDEF),
+        ]; //< {TopologyLocation[2]}
+        this.elt[geomIndex].setLocations(onLoc, leftLoc, rightLoc);
+        break;
+
+      default:
+        throw new Error(`Label(args: ${args}) (length: ${args.length}) Not implemented!`);
+        break;
     }
   }
 
@@ -36,6 +64,27 @@ class Label {
    */
   getLocation(geomIndex, posIndex) {
     return this.elt[geomIndex].get(posIndex);
+  }
+
+  /**
+   */
+  flip() {
+    this.elt.forEach(t => t.flip());
+  }
+
+  /**
+   * @param {Label} -
+   */
+  merge(lbl) {
+    for (let i=0; i < this.elt.length; i++) {
+      this.elt[i].merge(lbl.elt[i]);
+    }
+  }
+
+  /** `bool Label::isNull() const`
+   */
+  isObjectNull() {
+    return this.elt.every(gl => gl.isNull());
   }
 }
 

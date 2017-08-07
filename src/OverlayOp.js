@@ -1,6 +1,7 @@
 const LineIntersector = require('./LineIntersector');
 const GeometryGraph = require('./GeometryGraph');
 const PlanarGraph = require('./PlanarGraph');
+const EdgeList = require('./EdgeList');
 
 /** GEOS's OverlayOp (includes GeometryGraphOperation)
  */
@@ -8,7 +9,7 @@ class OverlayOp {
   /**
    * @param {Geometry} geom0 -
    * @param {Geometry} geom1 -
-   * @param {Number} opcode - ?
+   * @param {Number} opCode - ?
    */
   static overlayOp(geom0, geom1, opCode) {
     const gov = new OverlayOp(geom0, geom1);
@@ -25,12 +26,14 @@ class OverlayOp {
 
     // OverlayOp ---
     this.graph = new PlanarGraph();
+    this.edgeList = new EdgeList();
   }
 
   /**
    * computeOverlay
+   * @param {Number} opCode - ?
    */
-  getResultGeometry() {
+  getResultGeometry(opCode) {
     // Copy points from input Geometries.
     // This ensures that any Point geometries
     // in the input are considered for inclusion in the result set
@@ -47,6 +50,8 @@ class OverlayOp {
     const baseSplitEdges = []; //< {Edge[]}
     this.arg[0].computeSplitEdges(baseSplitEdges);
     this.arg[1].computeSplitEdges(baseSplitEdges);
+
+    this.insertUniqueEdges(baseSplitEdges);
 
     // TODO:
   }
@@ -70,6 +75,40 @@ class OverlayOp {
         const newNode = this.graph.addNode(graphNode.getCoordinate());
         newNode.setLabel(argIndex, graphNode.getLabel().getLocation(argIndex));
       });
+  }
+
+  /**
+   * @param {Edge[]} edges -
+   */
+  insertUniqueEdges(edges) {
+    edges.forEach(e => this.insertUniqueEdge(e));
+  }
+
+  /**
+   * @param {Edge} e -
+   */
+  insertUniqueEdge(e) {
+    const existingEdge = this.edgeList.findEqualEdge(e);
+
+    // If an identical edge already exists, simply update its label
+    if (existingEdge) {
+      const existingLabel = existingEdge.getLabel();
+      const labelToMerge = e.getLabel();
+
+      // check if new edge is in reverse direction to existing edge
+      // if so, must flip the label before merging it
+      if (!existingEdge.isPointwiseEqual(e))
+        labelToMerge.flip();
+
+      const depth = existingEdge.getDepth();
+      if (!depth.isObjectNull())
+        depth.addLabel(existingLabel);
+
+      depth.addLabel(labelToMerge);
+      existingLabel.merge(labelToMerge);
+    } else { // no matching existing edge was found
+      this.edgeList.add(e);
+    }
   }
 
   static get opUNION() {

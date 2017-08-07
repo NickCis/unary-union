@@ -1,19 +1,27 @@
 const EdgeIntersectionList = require('./EdgeIntersectionList');
 const {equals2D} = require('./util');
+const Label = require('./Label');
+const Depth = require('./Depth');
 
 /** GEOS's geos::geomgraph::Edge
  */
 class Edge {
   /**
+   * TODO: Check constructor
+   *
+   * `Edge::Edge(CoordinateSequence* newPts, const Label& newLabel)`
    * @param {Coordinates[]} newPts -
    * @params {Label} label -
    */
   constructor(newPts, label) {
-    this.pts = newPts;
-    this.label = label;
+    // GraphComponent ----
+    this.label = label ? label : new Label();
 
+    // ---
+    this.pts = newPts;
     this.isIsolatedVar = false;
     this.eiList = new EdgeIntersectionList(this);
+    this.depth = new Depth();
   }
 
   /**
@@ -57,8 +65,6 @@ class Edge {
    * @param {Number} geomIndex -
    */
   addIntersections(li, segmentIndex, geomIndex) {
-    console.log('----  addIntersections');
-    // TODO
     for (let i=0; i < li.getIntersectionNum(); i++) {
       this.addIntersection(li, segmentIndex, geomIndex, i);
     }
@@ -91,6 +97,32 @@ class Edge {
     }
 
     this.eiList.add(intPt, normalizedSegmentIndex, dist);
+  }
+
+  /**
+   * @param {Edge} e -
+   * @return {boolean] - true if the coordinate sequences of the Edges are identical
+   */
+  isPointwiseEqual(e) {
+    const npts = this.getNumPoints();
+    const enpts = e.getNumPoints();
+
+    if (npts != enpts)
+      return false;
+
+    for (let i=0; i < npts; ++i) {
+      if (! equals2D(this.pts[i], e.pts[i]))
+        return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * @return {Depth} -
+   */
+  getDepth() {
+    return this.depth;
   }
 }
 
