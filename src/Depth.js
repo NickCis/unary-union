@@ -47,7 +47,7 @@ class Depth {
    * @param {Location} loc -
    */
   addDepth(geomIndex, posIndex, loc) {
-    if (loc == Location::INTERIOR)
+    if (loc == Location.INTERIOR)
       this.depth[geomIndex][posIndex]++;
   }
 
