@@ -1,6 +1,10 @@
 const NodeMap = require('./NodeMap');
 const Location = require('./Location');
 
+/**
+ * [Header file](https://github.com/echoz/xlibspatialite/blob/master/geos/include/geos/geomgraph/PlanarGraph.h)
+ * [Cpp file](https://github.com/echoz/xlibspatialite/blob/master/geos/src/geomgraph/PlanarGraph.cpp)
+ */
 class PlanarGraph {
   constructor() {
     this.edges = []; //< Edges[]

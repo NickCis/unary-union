@@ -11,6 +11,8 @@ const SimpleEdgeIntersector = require('./index/EdgeSetIntersector/SimpleEdgeInte
 
 /** GEOS's geos::geomgraph::GeometryGraph
  * A GeometryGraph is a graph that models a given geometry
+ * [Header file](https://github.com/echoz/xlibspatialite/blob/master/geos/include/geos/geomgraph/GeometryGraph.h)
+ * [Cpp file](https://github.com/echoz/xlibspatialite/blob/master/geos/src/geomgraph/GeometryGraph.cpp)
  */
 class GeometryGraph extends PlanarGraph {
   /**

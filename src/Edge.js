@@ -4,6 +4,8 @@ const Label = require('./Label');
 const Depth = require('./Depth');
 
 /** GEOS's geos::geomgraph::Edge
+ * [Header file](https://github.com/echoz/xlibspatialite/blob/master/geos/include/geos/geomgraph/Edge.h)
+ * [Cpp file](https://github.com/echoz/xlibspatialite/blob/master/geos/src/geomgraph/Edge.cpp)
  */
 class Edge {
   /**

@@ -4,6 +4,8 @@ const PlanarGraph = require('./PlanarGraph');
 const EdgeList = require('./EdgeList');
 
 /** GEOS's OverlayOp (includes GeometryGraphOperation)
+ * [Header](https://github.com/echoz/xlibspatialite/blob/master/geos/include/geos/operation/overlay/OverlayOp.h)
+ * [Cpp File](https://github.com/echoz/xlibspatialite/blob/master/geos/src/operation/overlay/OverlayOp.cpp)
  */
 class OverlayOp {
   /**
@@ -18,6 +20,8 @@ class OverlayOp {
 
   constructor(geom0, geom1) {
     // GeometryGraphOperation constructor
+    // [Header file](https://github.com/echoz/xlibspatialite/blob/master/geos/include/geos/operation/GeometryGraphOperation.h)
+    // [Cpp file](https://github.com/echoz/xlibspatialite/blob/master/geos/src/operation/GeometryGraphOperation.cpp)
     this.li = new LineIntersector();
     this.arg = [
       new GeometryGraph(0, geom0),

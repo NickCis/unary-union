@@ -11,6 +11,9 @@ function getEdgeKey(e) {
  *
  * It supports locating edges
  * that are pointwise equals to a target edge.
+ *
+ * [Header file](https://github.com/echoz/xlibspatialite/blob/master/geos/include/geos/geomgraph/EdgeList.h)
+ * [Cpp file](https://github.com/echoz/xlibspatialite/blob/master/geos/src/geomgraph/EdgeList.cpp)
  */
 class EdgeList {
   constructor() {

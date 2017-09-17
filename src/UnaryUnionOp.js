@@ -2,6 +2,9 @@ const {flattenEach} = require('@turf/meta');
 const {getGeomType, geometryCollection} = require('@turf/invariant');
 const OverlayOp = require('./OverlayOp');
 
+/**
+ * [UnaryUnionOp geos's class](https://github.com/echoz/xlibspatialite/blob/master/geos/include/geos/operation/union/UnaryUnionOp.h)
+ */
 class UnaryUnionOp {
   constructor(geoJson) {
     // TODO: validate input

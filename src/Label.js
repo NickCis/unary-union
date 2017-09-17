@@ -2,6 +2,8 @@ const TopologyLocation = require('./TopologyLocation');
 const Location = require('./Location');
 
 /** GEOS's geos::geomgraph::Label
+ * [Header file](https://github.com/echoz/xlibspatialite/blob/master/geos/include/geos/geomgraph/Label.h)
+ * [Cpp file](https://github.com/echoz/xlibspatialite/blob/master/geos/src/geomgraph/Label.cpp)
  */
 class Label {
   /**
